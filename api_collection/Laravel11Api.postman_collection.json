@@ -1,0 +1,838 @@
+{
+	"info": {
+		"_postman_id": "4898b597-5765-4760-9ad9-2632b605b329",
+		"name": "Laravel11Api",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "14415247"
+	},
+	"item": [
+		{
+			"name": "User",
+			"item": [
+				{
+					"name": "LogIn",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "email",
+									"value": "delwar@gmail.com",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "123456",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{SERVER}}/api/login",
+							"host": [
+								"{{SERVER}}"
+							],
+							"path": [
+								"api",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Registration",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "name",
+									"value": "Delwar Hossain",
+									"type": "text"
+								},
+								{
+									"key": "email",
+									"value": "delwar10@gmail.com",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "12345678",
+									"type": "text"
+								},
+								{
+									"key": "roles",
+									"value": "Admin",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{SERVER}}/api/register",
+							"host": [
+								"{{SERVER}}"
+							],
+							"path": [
+								"api",
+								"register"
+							],
+							"query": [
+								{
+									"key": "name",
+									"value": "Delwar Hossain",
+									"disabled": true
+								},
+								{
+									"key": "email",
+									"value": "delwarhossain19@gamil.com",
+									"disabled": true
+								},
+								{
+									"key": "password",
+									"value": "12345678",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "LogOut",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{TOKEN}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{SERVER}}/api/logout",
+							"host": [
+								"{{SERVER}}"
+							],
+							"path": [
+								"api",
+								"logout"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Change Login User Password",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{TOKEN}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "password",
+									"value": "12345678",
+									"type": "text"
+								},
+								{
+									"key": "confirmed",
+									"value": "12345678",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{SERVER}}/api/changepassword",
+							"host": [
+								"{{SERVER}}"
+							],
+							"path": [
+								"api",
+								"changepassword"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "User List",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{TOKEN}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{SERVER}}/api/user_list",
+							"host": [
+								"{{SERVER}}"
+							],
+							"path": [
+								"api",
+								"user_list"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "User Edit",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{TOKEN}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{SERVER}}/api/user_edit/5",
+							"host": [
+								"{{SERVER}}"
+							],
+							"path": [
+								"api",
+								"user_edit",
+								"5"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "LogIn User Info",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{TOKEN}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "password",
+									"value": "87654321",
+									"type": "text",
+									"disabled": true
+								}
+							]
+						},
+						"url": {
+							"raw": "{{SERVER}}/api/loggeduser",
+							"host": [
+								"{{SERVER}}"
+							],
+							"path": [
+								"api",
+								"loggeduser"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "User Show",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [
+							{
+								"warning": "This is a duplicate header and will be overridden by the Authorization header generated by Postman.",
+								"key": "Authorization",
+								"value": "Bearer {{TOKEN}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{SERVER}}/api/user_show/5",
+							"host": [
+								"{{SERVER}}"
+							],
+							"path": [
+								"api",
+								"user_show",
+								"5"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "User Update",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{TOKEN}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "name",
+									"value": "Delwar Hossain1",
+									"type": "text"
+								},
+								{
+									"key": "email",
+									"value": "delwar101@gmail.com",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "123456789",
+									"type": "text"
+								},
+								{
+									"key": "roles",
+									"value": "Admin",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{SERVER}}/api/user_update/5",
+							"host": [
+								"{{SERVER}}"
+							],
+							"path": [
+								"api",
+								"user_update",
+								"5"
+							],
+							"query": [
+								{
+									"key": "name",
+									"value": "Delwar Hossain",
+									"disabled": true
+								},
+								{
+									"key": "email",
+									"value": "delwarhossain19@gamil.com",
+									"disabled": true
+								},
+								{
+									"key": "password",
+									"value": "12345678",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "User Delete",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{TOKEN}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{SERVER}}/api/user_delete/41",
+							"host": [
+								"{{SERVER}}"
+							],
+							"path": [
+								"api",
+								"user_delete",
+								"41"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Role",
+			"item": [
+				{
+					"name": "Role Create",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{TOKEN}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "name",
+									"value": "Top Managment",
+									"type": "text"
+								},
+								{
+									"key": "permission[]",
+									"value": "Admin Edit",
+									"type": "text"
+								},
+								{
+									"key": "permission[]",
+									"value": "user_add",
+									"type": "text",
+									"disabled": true
+								}
+							]
+						},
+						"url": {
+							"raw": "{{SERVER}}/api/roles",
+							"host": [
+								"{{SERVER}}"
+							],
+							"path": [
+								"api",
+								"roles"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Role Update",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{TOKEN}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{SERVER}}/api/roles/1?name=Super Admin&permission[]=",
+							"host": [
+								"{{SERVER}}"
+							],
+							"path": [
+								"api",
+								"roles",
+								"1"
+							],
+							"query": [
+								{
+									"key": "name",
+									"value": "Super Admin"
+								},
+								{
+									"key": "permission[]",
+									"value": ""
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Role Edit Data",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{TOKEN}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{SERVER}}/api/roles/8/edit",
+							"host": [
+								"{{SERVER}}"
+							],
+							"path": [
+								"api",
+								"roles",
+								"8",
+								"edit"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Role Wise User",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{TOKEN}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{SERVER}}/api/role_wise_user",
+							"host": [
+								"{{SERVER}}"
+							],
+							"path": [
+								"api",
+								"role_wise_user"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Role List",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{TOKEN}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{SERVER}}/api/roles",
+							"host": [
+								"{{SERVER}}"
+							],
+							"path": [
+								"api",
+								"roles"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Role",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{TOKEN}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{SERVER}}/api/roles/17",
+							"host": [
+								"{{SERVER}}"
+							],
+							"path": [
+								"api",
+								"roles",
+								"17"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Permission",
+			"item": [
+				{
+					"name": "Permission list",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{TOKEN}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{SERVER}}/api/permissions",
+							"host": [
+								"{{SERVER}}"
+							],
+							"path": [
+								"api",
+								"permissions"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Permission Create",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{TOKEN}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "name",
+									"value": "permission_test",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{SERVER}}/api/permissions",
+							"host": [
+								"{{SERVER}}"
+							],
+							"path": [
+								"api",
+								"permissions"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Permission Edit Data",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{TOKEN}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{SERVER}}/api/permissions/1/edit",
+							"host": [
+								"{{SERVER}}"
+							],
+							"path": [
+								"api",
+								"permissions",
+								"1",
+								"edit"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Permission Update",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{TOKEN}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{SERVER}}/api/permissions/12?name=permission_test1",
+							"host": [
+								"{{SERVER}}"
+							],
+							"path": [
+								"api",
+								"permissions",
+								"12"
+							],
+							"query": [
+								{
+									"key": "name",
+									"value": "permission_test1"
+								},
+								{
+									"key": "",
+									"value": "",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Permission Delete",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{TOKEN}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{SERVER}}/api/permissions/11",
+							"host": [
+								"{{SERVER}}"
+							],
+							"path": [
+								"api",
+								"permissions",
+								"11"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Assign Permission",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{TOKEN}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "permissions[]",
+									"value": "Admin Add",
+									"type": "text"
+								},
+								{
+									"key": "permissions[]",
+									"value": "manager_copy",
+									"type": "text",
+									"disabled": true
+								}
+							]
+						},
+						"url": {
+							"raw": "{{SERVER}}/api/assign_permission/43",
+							"host": [
+								"{{SERVER}}"
+							],
+							"path": [
+								"api",
+								"assign_permission",
+								"43"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

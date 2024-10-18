@@ -18,8 +18,7 @@ class UserController extends Controller
         $validated = Validator::make($request->all(), [
             'name' => 'required',
             'email' => 'required|email|unique:users',
-            'password' => 'required|confirmed',
-            // Make roles optional
+            'password' => 'required',
             'roles' => 'sometimes|exists:roles,name',
         ]);
 
@@ -57,6 +56,7 @@ class UserController extends Controller
             return response([
                 "message" => "Something went wrong, please try again later.",
                 "status" => "error",
+                "status1" => $e->getMessage(),
             ], 500);
         }
     }
@@ -154,8 +154,9 @@ class UserController extends Controller
 
     public function change_password(Request $request)
     {
+
         $request->validate([
-            'password' => 'required|string|min:8|confirmed', // Added confirmation and length validation
+            'password' => 'required', // Added confirmation and length validation
         ]);
 
         try {
@@ -254,6 +255,7 @@ class UserController extends Controller
                 return [
                     'id' => $data->id,
                     'name' => $data->name,
+                    'email' => $data->email,
                     'roles' => $data->roles,
                     'permissions' => $data->permissions,
                 ];
@@ -304,12 +306,13 @@ class UserController extends Controller
 
     public function user_update(Request $request, string $id)
     {
+      
         // Validate input data
         $validated = Validator::make($request->all(), [
-            "name" => "required",
-            "email" => "required|email|unique:users,email," . $id,
-            "status" => "sometimes|in:active,inactive", // Add validation for status
-            "roles" => "sometimes|exists:roles,name",   // Validate if roles are provided
+            "name" => "nullable|string",  // Name is optional and must be a string
+            "email" => "nullable|email|unique:users,email," . $id,  // Email is optional and must be unique, except for the current user's email
+            "roles" => "nullable|exists:roles,name",   // Roles are optional, validate if provided
+            "status" => "nullable|in:active,inactive", // Status is optional and must be either 'active' or 'inactive'
         ]);
 
         if ($validated->fails()) {
@@ -337,12 +340,8 @@ class UserController extends Controller
                 );
             }
 
-            // Update user details
-            $user->update([
-                "name" => $request->name,
-                "email" => $request->email,
-                "status" => $request->status,
-            ]);
+            // Update user details only if the fields are provided
+            $user->update($request->only(['name', 'email', 'status']));
 
             // Sync roles if provided
             if ($request->has('roles')) {
