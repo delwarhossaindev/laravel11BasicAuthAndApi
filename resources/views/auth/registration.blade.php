@@ -25,15 +25,18 @@
                     <div class="signup-form">
                         <h2 class="form-title">Sign up</h2>
 
-                        <form method="POST" action="{{ route('register.post') }}" class="register-form" id="register-form">
+                        <form method="POST" action="{{ route('register.post') }}" class="register-form"
+                            id="register-form">
                             @csrf
 
-                            @if(session('error'))
-                                <div class="alert alert-danger" role="alert">
-                                    {{ session('error') }}
-                                </div>
+                            @if ($errors->any())
+                                <ul class="alert alert-danger">
+                                    @foreach ($errors->all() as $error)
+                                        <li>{{ $error }}</li>
+                                    @endforeach
+                                </ul>
                             @endif
-
+                            
                             <div class="form-group">
                                 <label for="name"><i class="zmdi zmdi-account material-icons-name"></i></label>
                                 <input type="text" name="name" id="name" placeholder="Name" required />
@@ -66,7 +69,8 @@
 
                             <div class="form-group">
                                 <label for="re-pass"><i class="zmdi zmdi-lock-outline"></i></label>
-                                <input type="password" name="password_confirmation" id="password_confirmation" placeholder="Confirm Password" required />
+                                <input type="password" name="password_confirmation" id="password_confirmation"
+                                    placeholder="Confirm Password" required />
                                 @error('password_confirmation')
                                     <span class="text-danger" role="alert">
                                         <strong>{{ $message }}</strong>
@@ -77,12 +81,14 @@
                             <div class="form-group">
                                 <input type="checkbox" name="agree-term" id="agree-term" class="agree-term" required />
                                 <label for="agree-term" class="label-agree-term">
-                                    <span><span></span></span>I agree to all statements in <a href="#" class="term-service">Terms of service</a>
+                                    <span><span></span></span>I agree to all statements in <a href="#"
+                                        class="term-service">Terms of service</a>
                                 </label>
                             </div>
 
                             <div class="form-group form-button">
-                                <input type="submit" name="signup" id="signup" class="form-submit" value="Register" />
+                                <input type="submit" name="signup" id="signup" class="form-submit"
+                                    value="Register" />
                             </div>
                         </form>
                     </div>

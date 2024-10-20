@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Session;
 use App\Models\User;
 use Illuminate\View\View;
 use Illuminate\Http\RedirectResponse;
+use Exception;
 
 class AuthController extends Controller
 {
@@ -20,7 +21,12 @@ class AuthController extends Controller
      */
     public function index(): View
     {
-        return view('auth.login');
+        try {
+            return view('auth.login');
+        } catch (Exception $e) {
+            // Handle error and show an error message
+            return view('errors.general')->withErrors('An error occurred while loading the login page.');
+        }
     }
 
     /**
@@ -30,7 +36,12 @@ class AuthController extends Controller
      */
     public function registration(): View
     {
-        return view('auth.registration');
+        try {
+            return view('auth.registration');
+        } catch (Exception $e) {
+            // Handle error and show an error message
+            return view('errors.general')->withErrors('An error occurred while loading the registration page.');
+        }
     }
 
     /**
@@ -41,21 +52,26 @@ class AuthController extends Controller
      */
     public function postLogin(Request $request): RedirectResponse
     {
-        // Validate login credentials
-        $request->validate([
-            'email' => 'required|email',
-            'password' => 'required|min:6',
-        ]);
+        try {
+            // Validate login credentials
+            $request->validate([
+                'email' => 'required|email',
+                'password' => 'required|min:6',
+            ]);
 
-        // Attempt login with provided credentials
-        $credentials = $request->only('email', 'password');
-        if (Auth::attempt($credentials)) {
-            // Redirect to the intended page or dashboard if successful
-            return redirect()->intended('dashboard')->withSuccess('You have successfully logged in.');
+            // Attempt login with provided credentials
+            $credentials = $request->only('email', 'password');
+            if (Auth::attempt($credentials)) {
+                // Redirect to the intended page or dashboard if successful
+                return redirect()->intended('dashboard')->withSuccess('You have successfully logged in.');
+            }
+
+            // Redirect back with error if login fails
+            return redirect()->route('login')->withErrors('Invalid credentials !!!');
+        } catch (Exception $e) {
+            // Handle any exception
+            return redirect()->route('login')->withErrors('An error occurred while processing your login request.');
         }
-
-        // Redirect back with error if login fails
-        return redirect()->route('login')->withErrors('Oops! You have entered invalid credentials.');
     }
 
     /**
@@ -66,21 +82,26 @@ class AuthController extends Controller
      */
     public function postRegistration(Request $request): RedirectResponse
     {
-        // Validate registration data
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|email|unique:users,email',
-            'password' => 'required|string|min:6|confirmed',
-        ]);
+        try {
+            // Validate registration data
+            $request->validate([
+                'name' => 'required|string|max:255',
+                'email' => 'required|email|unique:users,email',
+                'password' => 'required|string|min:6|confirmed',
+            ]);
 
-        // Create a new user
-        $user = $this->create($request->all());
+            // Create a new user
+            $user = $this->create($request->all());
 
-        // Automatically log in the new user
-        Auth::login($user);
+            // Automatically log in the new user
+            Auth::login($user);
 
-        // Redirect to the dashboard after successful registration
-        return redirect('dashboard')->withSuccess('Great! You have successfully registered and logged in.');
+            // Redirect to the dashboard after successful registration
+            return redirect('dashboard')->withSuccess('Great! You have successfully registered and logged in.');
+        } catch (Exception $e) {
+            // Handle any exception
+            return redirect()->route('register')->withErrors('An error occurred while processing your registration request.');
+        }
     }
 
     /**
@@ -90,13 +111,18 @@ class AuthController extends Controller
      */
     public function dashboard(): View|RedirectResponse
     {
-        // Check if the user is authenticated
-        if (Auth::check()) {
-            return view('welcome'); // Change to your dashboard view as necessary
-        }
+        try {
+            // Check if the user is authenticated
+            if (Auth::check()) {
+                return view('welcome'); // Change to your dashboard view as necessary
+            }
 
-        // Redirect to login if the user is not authenticated
-        return redirect()->route('login')->withErrors('Oops! You do not have access.');
+            // Redirect to login if the user is not authenticated
+            return redirect()->route('login')->withErrors('Oops! You do not have access.');
+        } catch (Exception $e) {
+            // Handle any exception
+            return redirect()->route('login')->withErrors('An error occurred while loading the dashboard.');
+        }
     }
 
     /**
@@ -107,11 +133,16 @@ class AuthController extends Controller
      */
     protected function create(array $data): User
     {
-        return User::create([
-            'name' => $data['name'],
-            'email' => $data['email'],
-            'password' => Hash::make($data['password']),
-        ]);
+        try {
+            return User::create([
+                'name' => $data['name'],
+                'email' => $data['email'],
+                'password' => Hash::make($data['password']),
+            ]);
+        } catch (Exception $e) {
+            // Handle any exception
+            throw new Exception('An error occurred while creating the user.');
+        }
     }
 
     /**
@@ -121,11 +152,16 @@ class AuthController extends Controller
      */
     public function logout(): RedirectResponse
     {
-        // Clear session data and log the user out
-        Session::flush();
-        Auth::logout();
+        try {
+            // Clear session data and log the user out
+            Session::flush();
+            Auth::logout();
 
-        // Redirect to the login page
-        return redirect()->route('login');
+            // Redirect to the login page
+            return redirect()->route('login');
+        } catch (Exception $e) {
+            // Handle any exception
+            return redirect()->route('dashboard')->withErrors('An error occurred while logging out.');
+        }
     }
 }

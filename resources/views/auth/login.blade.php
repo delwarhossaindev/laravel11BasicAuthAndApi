@@ -9,6 +9,7 @@
 
     <!-- Font Icon -->
     <link rel="stylesheet" href="{{ asset('auth/fonts/material-icon/css/material-design-iconic-font.min.css') }}">
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
 
     <!-- Main css -->
     <link rel="stylesheet" href="{{ asset('auth/css/style.css') }}">
@@ -32,37 +33,31 @@
                         <form method="POST" action="{{ route('login.post') }}" class="register-form" id="login-form">
                             @csrf
 
-                            @if(session('error'))
-                                <div class="alert alert-danger" role="alert">
-                                    {{ session('error') }}
-                                </div>
+                            @if ($errors->any())
+                                <ul class="alert alert-danger">
+                                    @foreach ($errors->all() as $error)
+                                        <li>{{ $error }}</li>
+                                    @endforeach
+                                </ul>
                             @endif
 
+                            <!-- Email Input -->
                             <div class="form-group">
                                 <label for="email"><i class="zmdi zmdi-account material-icons-name"></i></label>
-                                <input type="email" name="email" id="email" placeholder="Email" required />
+                                <input type="email" name="email" id="email" placeholder="Email"
+                                    value="{{ old('email') }}" required />
                             </div>
 
-                            @error('email')
-                                <span class="invalid-feedback" role="alert">
-                                    <strong>{{ $message }}</strong>
-                                </span>
-                            @enderror
-
+                            <!-- Password Input -->
                             <div class="form-group">
                                 <label for="password"><i class="zmdi zmdi-lock"></i></label>
                                 <input type="password" name="password" id="password" placeholder="Password" required />
                             </div>
 
-                            @error('password')
-                                <span class="invalid-feedback" role="alert">
-                                    <strong>{{ $message }}</strong>
-                                </span>
-                            @enderror
-
                             <div class="form-group">
                                 <input type="checkbox" name="remember-me" id="remember-me" class="agree-term" />
-                                <label for="remember-me" class="label-agree-term"><span><span></span></span>Remember me</label>
+                                <label for="remember-me" class="label-agree-term"><span><span></span></span>Remember
+                                    me</label>
                             </div>
 
                             <div class="form-group form-button">
