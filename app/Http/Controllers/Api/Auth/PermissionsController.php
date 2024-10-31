@@ -29,7 +29,7 @@ class PermissionsController extends Controller
             return response([
                 'message' => $e->getMessage(),
                 'status' => 'Error'
-            ], 500);
+            ], 403);
         }
     }
 
@@ -48,7 +48,7 @@ class PermissionsController extends Controller
                 return response([
                     'message' => 'Permission Not Found',
                     'status' => 'Error',
-                ], 404);
+                ], 403);
             }
 
             return response([
@@ -61,7 +61,7 @@ class PermissionsController extends Controller
             return response([
                 'message' => $e->getMessage(),
                 'status' => 'Error',
-            ], 500);
+            ], 403);
         }
     }
 
@@ -91,7 +91,7 @@ class PermissionsController extends Controller
             return response([
                 'message' => $e->getMessage(),
                 'status' => 'Error'
-            ], 500);
+            ], 403);
         }
     }
 
@@ -110,7 +110,7 @@ class PermissionsController extends Controller
                 return response([
                     'message' => 'Permission Not Found',
                     'status' => 'Error'
-                ], 404);
+                ], 403);
             }
 
             return response([
@@ -123,7 +123,7 @@ class PermissionsController extends Controller
             return response([
                 'message' => $e->getMessage(),
                 'status' => 'Error'
-            ], 500);
+            ], 403);
         }
     }
 
@@ -154,7 +154,7 @@ class PermissionsController extends Controller
                 return response([
                     'message' => 'Permission Not Found',
                     'status' => 'Error',
-                ], 404);
+                ], 403);
             }
 
             $permission->update($request->only('name'));
@@ -169,7 +169,7 @@ class PermissionsController extends Controller
             return response([
                 'message' => $e->getMessage(),
                 'status' => 'Error',
-            ], 500);
+            ], 403);
         }
     }
 
@@ -188,7 +188,7 @@ class PermissionsController extends Controller
                 return response([
                     'message' => 'Permission Not Found',
                     'status' => 'Error',
-                ], 404);
+                ], 403);
             }
 
             $permission->delete();
@@ -202,7 +202,7 @@ class PermissionsController extends Controller
             return response([
                 'message' => $e->getMessage(),
                 'status' => 'Error',
-            ], 500);
+            ], 403);
         }
     }
 }

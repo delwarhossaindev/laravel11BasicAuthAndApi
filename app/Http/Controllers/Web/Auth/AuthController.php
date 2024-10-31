@@ -67,12 +67,13 @@ class AuthController extends Controller
             }
 
             // Redirect back with error if login fails
-            return redirect()->route('login')->withErrors('Invalid credentials !!!');
-        } catch (Exception $e) {
-            // Handle any exception
-            return redirect()->route('login')->withErrors('An error occurred while processing your login request.');
+            return redirect()->route('login')->withErrors('Oops! You have entered invalid credentials.');
+        } catch (\Exception $e) {
+            // Handle any unexpected exceptions
+            return redirect()->route('login')->withErrors('An error occurred while trying to log you in. Please try again.');
         }
     }
+
 
     /**
      * Handle registration request.

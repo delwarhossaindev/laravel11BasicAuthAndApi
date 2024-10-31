@@ -51,36 +51,54 @@ class RolesController extends Controller
 
     public function store(Request $request)
     {
+        // Validate the request input
         $validated = Validator::make($request->all(), [
             'name' => 'required|unique:roles,name',
-            'permission' => 'required|array', // Ensure permissions are passed as an array
+            'permission' => 'required|array',
+            'permission.*' => 'exists:permissions,name', // Ensure each permission name exists in the permissions table
+        ], [
+            'name.unique' => 'The role name already exists. Please choose a different name.',
+            'permission.*.exists' => 'One or more permissions do not exist. Please check the permission names.',
         ]);
 
         if ($validated->fails()) {
             return response([
                 'message' => $validated->errors(),
                 'status' => 'error'
-            ], 400); // Use 400 for bad request
+            ], 400); // 400 Bad Request
         }
 
+        // Begin database transaction
         DB::beginTransaction();
         try {
-            $role = Role::create(['name' => $request->get('name'), 'guard_name' => 'web']);
+            // Create a new role and sync permissions
+            $role = Role::create([
+                'name' => $request->get('name'),
+                'guard_name' => 'web'
+            ]);
             $role->syncPermissions($request->permission);
+
+            // Commit the transaction
             DB::commit();
+
+            // Return a successful response
             return response([
                 'role' => $role,
                 'message' => 'Role created successfully',
-                'status' => 'Success'
-            ], 201); // Use 201 for resource created
+                'status' => 'success'
+            ], 201); // 201 Created
         } catch (\Exception $e) {
+            // Rollback transaction on error
             DB::rollback();
+
+            // Return an error response
             return response([
                 "message" => $e->getMessage(),
                 "status" => "error",
-            ], 500); // Use 500 for server error
+            ], 403); // 403 Internal Server Error
         }
     }
+
 
 
     public function show(Role $role)
@@ -126,36 +144,42 @@ class RolesController extends Controller
     {
         DB::beginTransaction();
         try {
+            // Validate the request input
             $validated = Validator::make($request->all(), [
-                'name' => 'required',
+                'name' => 'required|unique:roles,name,' . $id, // Ensure the name is unique, excluding the current role
                 'permission' => 'required|array', // Ensure permissions are passed as an array
+                'permission.*' => 'exists:permissions,name', // Validate that each permission name exists
+            ], [
+                'name.unique' => 'The role name already exists. Please choose a different name.',
+                'permission.*.exists' => 'One or more permissions do not exist. Please check the permission names.',
             ]);
 
             if ($validated->fails()) {
                 return response([
                     'message' => $validated->errors(),
                     'status' => 'error'
-                ], 400); // Use 400 for bad request
+                ], 400); // 400 Bad Request
             }
 
             $role = Role::findOrFail($id); // Use findOrFail to handle not found
-            $role->update($request->only('name'));
-            $role->syncPermissions($request->get('permission'));
-            DB::commit();
+            $role->update($request->only('name')); // Update the role's name
+            $role->syncPermissions($request->get('permission')); // Sync the permissions
+            DB::commit(); // Commit the transaction
 
             return response([
-                'role' => Role::with('permissions')->findOrFail($id),
+                'role' => Role::with('permissions')->findOrFail($id), // Return the updated role with permissions
                 'message' => 'Role updated successfully',
-                'status' => 'Success'
-            ], 200);
+                'status' => 'success' // Use lowercase 'success'
+            ], 200); // 200 OK
         } catch (\Exception $e) {
-            DB::rollback();
+            DB::rollback(); // Rollback transaction on error
             return response([
                 "message" => $e->getMessage(),
                 "status" => "error",
-            ], 500); // Use 500 for server error
+            ], 403); // 403 Internal Server Error
         }
     }
+
 
     public function destroy($id)
     {

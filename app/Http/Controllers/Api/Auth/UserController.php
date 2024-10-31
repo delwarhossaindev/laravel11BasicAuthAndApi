@@ -15,51 +15,59 @@ class UserController extends Controller
 {
     public function register(Request $request)
     {
+        // Validate the request input
         $validated = Validator::make($request->all(), [
-            'name' => 'required',
-            'email' => 'required|email|unique:users',
-            'password' => 'required',
-            'roles' => 'sometimes|exists:roles,name',
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|unique:users,email',
+            'password' => 'required|string|min:8|confirmed', // Ensure the password is confirmed
+            'roles' => 'sometimes|array', // Roles should be an array if provided
+            'roles.*' => 'exists:roles,name', // Validate each role name if provided
+        ], [
+            'email.unique' => 'The email has already been taken.',
+            'roles.*.exists' => 'One or more roles do not exist. Please check the role names.',
         ]);
 
+        // Handle validation failures
         if ($validated->fails()) {
             return response([
                 'message' => $validated->errors(),
                 'status' => 'error',
-            ], 422);
+            ], 422); // 422 Unprocessable Entity
         }
 
         DB::beginTransaction();
         try {
+            // Create the user
             $user = User::create([
                 'name' => $request->name,
                 'email' => $request->email,
                 'password' => Hash::make($request->password),
             ]);
 
-            // Assign role if roles is provided
-            if ($request->has('roles') && $request->roles) {
+            // Assign roles if provided
+            if ($request->filled('roles')) {
                 $user->assignRole($request->roles);
             }
 
+            // Generate a token for the user
             $token = $user->createToken($request->email)->plainTextToken;
-            DB::commit();
+            DB::commit(); // Commit the transaction
 
             return response([
                 'token' => $token,
-                'message' => 'Registration Success',
+                'message' => 'Registration successful.',
                 'status' => 'success',
-            ], 201);
+            ], 201); // 201 Created
         } catch (\Exception $e) {
-
-            DB::rollback();
+            DB::rollback(); // Rollback on error
             return response([
                 "message" => "Something went wrong, please try again later.",
                 "status" => "error",
-                "status1" => $e->getMessage(),
-            ], 500);
+                "error" => $e->getMessage(), // Provide error detail only if necessary
+            ], 403); // 403 Internal Server Error
         }
     }
+
 
 
     public function login(Request $request)
@@ -91,7 +99,7 @@ class UserController extends Controller
             return response()->json([
                 'message' => 'An error occurred: ' . $e->getMessage(),
                 'status' => 'error',
-            ], 500);
+            ], 403);
         }
     }
 
@@ -109,7 +117,7 @@ class UserController extends Controller
             return response()->json([
                 'message' => 'Error logging out: ' . $e->getMessage(),
                 'status' => 'error',
-            ], 500);
+            ], 403);
         }
     }
 
@@ -173,7 +181,7 @@ class UserController extends Controller
                 'message' => 'Error changing password',
                 'status' => 'error',
                 'error' => $e->getMessage(),
-            ], 500);
+            ], 403);
         }
     }
 
@@ -193,7 +201,7 @@ class UserController extends Controller
                 'message' => 'Error fetching role list',
                 'status' => 'error',
                 'error' => $e->getMessage(),
-            ], 500);
+            ], 403);
         }
     }
 
@@ -220,7 +228,7 @@ class UserController extends Controller
                 'message' => 'Error fetching role wise user list',
                 'status' => 'error',
                 'error' => $e->getMessage(),
-            ], 500);
+            ], 403);
         }
     }
 
@@ -240,7 +248,7 @@ class UserController extends Controller
                 'message' => 'Error fetching permission list',
                 'status' => 'error',
                 'error' => $e->getMessage(),
-            ], 500);
+            ], 403);
         }
     }
 
@@ -271,7 +279,7 @@ class UserController extends Controller
                 'message' => 'Error fetching user list',
                 'status' => 'error',
                 'error' => $e->getMessage(),
-            ], 500);
+            ], 403);
         }
     }
 
@@ -287,7 +295,7 @@ class UserController extends Controller
                 return response([
                     'message' => 'User not found',
                     'status' => 'error',
-                ], 404);
+                ], 403);
             }
 
             return response([
@@ -299,14 +307,14 @@ class UserController extends Controller
             return response([
                 "message" => "Something went wrong: " . $e->getMessage(),
                 "status" => "error",
-            ], 500);
+            ], 403);
         }
     }
 
 
     public function user_update(Request $request, string $id)
     {
-      
+
         // Validate input data
         $validated = Validator::make($request->all(), [
             "name" => "nullable|string",  // Name is optional and must be a string
@@ -336,7 +344,7 @@ class UserController extends Controller
                         "message" => "User Not Found",
                         "status" => "error",
                     ],
-                    404
+                    403
                 );
             }
 
@@ -366,7 +374,7 @@ class UserController extends Controller
                     "message" => "An error occurred: " . $e->getMessage(),
                     "status" => "error",
                 ],
-                500
+                403
             );
         }
     }
@@ -401,7 +409,7 @@ class UserController extends Controller
                         "message" => "User not found!",
                         "status" => "error",
                     ],
-                    404
+                    403
                 );
             }
 
@@ -426,7 +434,7 @@ class UserController extends Controller
                     "message" => "An error occurred: " . $e->getMessage(),
                     "status" => "error",
                 ],
-                500
+                403
             );
         }
     }
@@ -442,7 +450,7 @@ class UserController extends Controller
                 return response([
                     'message' => 'User not found',
                     'status' => 'error',
-                ], 404);
+                ], 403);
             }
 
             return response([
@@ -454,7 +462,7 @@ class UserController extends Controller
             return response([
                 "message" => "Something went wrong: " . $e->getMessage(),
                 "status" => "error",
-            ], 500);
+            ], 403);
         }
     }
 
@@ -472,7 +480,7 @@ class UserController extends Controller
                         "message" => "User not found!",
                         "status" => "error",
                     ],
-                    404
+                    403
                 );
             }
 
@@ -494,7 +502,7 @@ class UserController extends Controller
                     "message" => "An error occurred: " . $e->getMessage(),
                     "status" => "error",
                 ],
-                500
+                403
             );
         }
     }
